@@ -1,79 +1,8 @@
-# Copyright 2015 The Chromium Authors
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
-
-# This is a .pyl, or "Python Literal", file. You can treat it just like a
-# .json file, with the following exceptions:
-# * all keys must be quoted (use single quotes, please);
-# * comments are allowed, using '#' syntax; and
-# * trailing commas are allowed.
-
-# gn_isolate_map.pyl - A mapping of Ninja build target names to GN labels and
-# test type classifications for the tests that are run on the bots.
-#
-# This mapping is used by MB so that we can uniformly refer to test binaries
-# by their Ninja target names in the recipes and not need to worry about how
-# they are referred to in GN or GYP specifically (the GYP target name is pretty
-# much always the same as the Ninja target name, since GYP target names are not
-# hierarchical).
-#
-# TODO(crbug.com/816629): Remove the need for this file altogether :). Also,
-# see below.
-#
-# The "label" field specifies the matching GN label for the given ninja
-# target.
-#
-# The "type" field is used to determine what the command line for the test
-# needs to be; valid values are:
-#
-#  "windowed_test_launcher"
-#  : the test is a gtest-based test that uses the parallelizing TestLauncher
-#    from //base/test:test_support and needs to run under Xvfb if run on
-#    some platforms (eg. Linux Desktop and Ozone CrOS).
-#  "console_test_launcher"
-#  : the test is a gtest-based test that uses the parallelizing TestLauncher
-#    from //base/test:test_support but does not need Xvfb.
-#  "additional_compile_target"
-#  : this isn't actually a test, but we still need a mapping from the
-#    ninja target to the GN label in order to analyze it.
-#  "junit_test"
-#  : this is a JUnit test.
-#  "script"
-#  : the test is a python script; the path to the script is specified in
-#    the "script" field.
-#  "generated_script"
-#  : the test is a script generated at build time; the script *must* be
-#    in output_dir/bin/run_$target (or output_dir\bin\run_$target.bat on
-#    Windows).
-#  "unknown"
-#  : (the default), which indicates that we don't know what the command line
-#    needs to be (this is a fatal error).
-
-# The optional "executable" field can be used to override the name
-# of the binary to run. If the field is not specified, the binary
-# name will be assumed to be the same as the ninja build target name.
-# On Windows, ".exe" will be automatically appended if need be, so
-# the executable name (and target name) should not contain an ".exe".
-#
-# The optional "args" field may be specified for "windowed_test_launcher",
-# "console_test_launcher", and "script"-type tests, and can be used to
-# append extra command line args onto the command line determined by the
-# "type". If not specified, it defaults to an empty list (no extra args).
-#
-# The optional "label_type" field can be used in conjunction with
-# "type" == "console_test_launcher" or "type" == "windowed_test_launcher"
-# to indicate that even though the command line
-# to use follows the test_launcher patterns, the actual GN label refers
-# to a different type of thing (usually a "group") and so MB can find
-# the generated runtime files in the right place. This is used, for
-# example, in content_site_isolation_browsertests .
-#
-# The optional "script" field is used when "type" == "script", and
-# specifies the GN path to the corresponding python file, e.g.
-# "//testing/scripts/foo.py".
-#
-# The optional "skip_usage_check" field indicates that we should skip the check
-# that the target is used in at least one buildbot json file.
+# THIS IS A GENERATED FILE DO NOT EDIT!!!
+# Instead:
+# 1. Modify //infra/config/targets/targets.star
+# 2. Run //infra/config/main.star
+# 3. Run //infra/config/scripts/sync-isolate-map.py
 
 {
   "All_syzygy": {
@@ -212,7 +141,7 @@
     "label": "//base:base_perftests",
     "type": "script",
     "script": "//testing/scripts/run_performance_tests.py",
-    "skip_usage_check": True,  # Used by Pinpoint: crbug.com/1042778
+    "skip_usage_check": True,
     "args": [
       "base_perftests",
       "--non-telemetry=true",
@@ -298,12 +227,6 @@
     "label": "//chrome/test:browser_tests",
     "type": "windowed_test_launcher",
   },
-  # TODO(b/246519185) - Py3 incompatible, decide if to keep test.
-  #"browser_tests_apprtc": {
-  #  "label": "//chrome/test:browser_tests_apprtc",
-  #  "type": "windowed_test_launcher",
-  #  "executable": "browser_tests",
-  # },
   "build_junit_tests": {
     "label": "//build/android:build_junit_tests",
     "type": "generated_script",
@@ -470,7 +393,6 @@
     "label": "//chrome/android:chrome_public_smoke_test",
     "type": "console_test_launcher",
   },
-  # TODO(crbug.com/1238057): Rename to chrome_public_integration_test_apk
   "chrome_public_test_apk": {
     "label": "//chrome/android:chrome_public_test_apk",
     "type": "console_test_launcher",
@@ -920,7 +842,7 @@
     "label": "//gpu:gpu_perftests",
     "type": "script",
     "script": "//testing/scripts/run_performance_tests.py",
-    "skip_usage_check": True,  # Used by Pinpoint: crbug.com/1042778
+    "skip_usage_check": True,
     "args": [
       "gpu_perftests",
       "--non-telemetry=true",
@@ -1161,7 +1083,7 @@
     "label": "//chrome/test:load_library_perf_tests",
     "type": "script",
     "script": "//testing/scripts/run_performance_tests.py",
-    "skip_usage_check": True,  # Used by Pinpoint: crbug.com/1042778
+    "skip_usage_check": True,
     "args": [
       "load_library_perf_tests",
       "--non-telemetry=true",
@@ -1180,7 +1102,7 @@
     "label": "//media:media_perftests",
     "type": "script",
     "script": "//testing/scripts/run_performance_tests.py",
-    "skip_usage_check": True,  # Used by Pinpoint: crbug.com/1042778
+    "skip_usage_check": True,
     "args": [
       "media_perftests",
       "--non-telemetry=true",
@@ -1249,8 +1171,6 @@
   },
   "mojo_rust": {
     "label": "//mojo/public/rust:mojo_rust",
-    # Since we can't build rust tests on Android now, add this for build
-    # coverage.
     "type": "additional_compile_target",
   },
   "mojo_rust_integration_unittests": {
@@ -1389,7 +1309,7 @@
     "label": "//chrome/test:performance_browser_tests",
     "type": "script",
     "script": "//testing/scripts/run_performance_tests.py",
-    "skip_usage_check": True,  # Used by Pinpoint: crbug.com/1042778
+    "skip_usage_check": True,
     "args": [
       "browser_tests",
       "--non-telemetry=true",
@@ -1397,8 +1317,6 @@
       "--test-launcher-jobs=1",
       "--test-launcher-retry-limit=0",
       "--test-launcher-print-test-stdio=always",
-      # Allow the full performance runs to take up to 60 seconds (rather than
-      # the default of 30 for normal CQ browser test runs).
       "--ui-test-action-timeout=60000",
       "--ui-test-action-max-timeout=60000",
       "--test-launcher-timeout=60000",
@@ -1588,7 +1506,6 @@
   "shell_dialogs_unittests": {
     "label": "//ui/shell_dialogs:shell_dialogs_unittests",
     "type": "console_test_launcher",
-    # These tests are more like dialog interactive ui tests.
     "args": [
       "--test-launcher-jobs=1",
     ],
@@ -1625,7 +1542,7 @@
     "label": "//chrome/test:sync_performance_tests",
     "type": "script",
     "script": "//testing/scripts/run_performance_tests.py",
-    "skip_usage_check": True,  # Used by Pinpoint: crbug.com/1042778
+    "skip_usage_check": True,
     "args": [
       "sync_performance_tests",
       "--non-telemetry=true",
@@ -1697,8 +1614,6 @@
       "-v",
     ],
   },
-  # This isolate is used by
-  # https://www.chromium.org/developers/cluster-telemetry
   "ct_telemetry_perf_tests_without_chrome": {
     "label": "//chrome/test:ct_telemetry_perf_tests_without_chrome",
     "type": "script",
@@ -1742,8 +1657,6 @@
       "--xvfb",
       "../../tools/perf/run_telemetry_tests",
       "-v",
-      # TODO(nedn, eyaich): Remove this flag once crbug.com/549140 is fixed &
-      # Telemetry no longer downloads files in parallel. (crbug.com/661434#c24)
       "--jobs=1",
       "--chrome-root",
       "../../",
@@ -1757,12 +1670,6 @@
     "label": "//build/rust/tests/test_serde_json_lenient:test_serde_json_lenient",
     "type": "console_test_launcher",
   },
-  # TODO(crbug.com/1080749): Re-add this once the test is fixed and re-enabled.
-  # "test_buildbucket_api_gpu_use_cases": {
-  #   "label": "//content/test:test_buildbucket_api_gpu_use_cases",
-  #   "script": "//testing/scripts/test_buildbucket_api_gpu_use_cases.py",
-  #   "type": "script",
-  # },
   "touch_to_fill_junit_tests": {
     "label": "//chrome/browser/touch_to_fill/android:touch_to_fill_junit_tests",
     "type": "generated_script",
@@ -1775,7 +1682,7 @@
     "label": "//components/tracing:tracing_perftests",
     "type": "script",
     "script": "//testing/scripts/run_performance_tests.py",
-    "skip_usage_check": True,  # Used by Pinpoint: crbug.com/1042778
+    "skip_usage_check": True,
     "args": [
       "tracing_perftests",
       "--non-telemetry=true",
@@ -1821,11 +1728,6 @@
     "label": "//chrome/test:unit_tests",
     "type": "windowed_test_launcher",
   },
-  # The test action timeouts for `updater_tests`, `updater_tests_system`, and
-  # `updater_tests_win_uac` are based on empirical observations of test
-  # runtimes, 2021-07. The launcher timeout was 90000 but then we increased
-  # the value to 180000 to work around an unfixable issue in the Windows
-  # COM runtime class activation crbug.com/1259178.
   "updater_tests": {
     "label": "//chrome/updater:updater_tests",
     "type": "console_test_launcher",
@@ -2084,9 +1986,6 @@
   },
   "xr_browser_tests": {
     "label": "//chrome/test:xr_browser_tests",
-    # We can't use the "script" type since we need to be run from the output
-    # directory (or at least given the path). Thus, we need to tell mb.py to not
-    # automatically append the .exe suffix on Windows.
     "type": "windowed_test_launcher",
     "executable": "run_xr_browser_tests.py",
     "executable_suffix": "",
